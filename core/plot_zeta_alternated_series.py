@@ -40,25 +40,25 @@ if __name__ == "__main__":
         sb.lineplot(x=line.T[0], y=line.T[1])
         en_point = en_point + vect * (-1) ** (i + 1)
 
-    # complex_power = 0.5 + 14.2j
-    # st_point = np.array([0, 0])
-    # line = st_point
-    # en_point = st_point
-    # for i in range(1, n_order):
-    #     vect = generate_zeta_vector(i, complex_power)
-    #     line = np.vstack((en_point, en_point + vect * (-1) ** (i + 1)))
-    #     sb.lineplot(x=line.T[0], y=line.T[1])
-    #     en_point = en_point + vect * (-1) ** (i + 1)
+    complex_power = 0.5 + 2j
+    st_point = np.array([0, 0])
+    line = st_point
+    en_point = st_point
+    for i in range(1, n_order):
+        vect = generate_zeta_vector(i, complex_power)
+        line = np.vstack((en_point, en_point + vect * (-1) ** (i + 1)))
+        sb.lineplot(x=line.T[0], y=line.T[1])
+        en_point = en_point + vect * (-1) ** (i + 1)
 
-    # complex_power = 0.5 + 14.13j
-    # st_point = np.array([0, 0])
-    # line = st_point
-    # en_point = st_point
-    # for i in range(1, n_order):
-    #     vect = generate_zeta_vector(i, complex_power)
-    #     line = np.vstack((en_point, en_point + vect*(-1)**(i+1)))
-    #     sb.lineplot(x=line.T[0], y=line.T[1])
-    #     en_point = en_point + vect
+    complex_power = 0.5 + 27j
+    st_point = np.array([0, 0])
+    line = st_point
+    en_point = st_point
+    for i in range(1, n_order):
+        vect = generate_zeta_vector(i, complex_power)
+        line = np.vstack((en_point, en_point + vect * (-1) ** (i + 1)))
+        sb.lineplot(x=line.T[0], y=line.T[1])
+        en_point = en_point + vect * (-1) ** (i + 1)
 
     plt.title("Line plot")
     plt.show()
