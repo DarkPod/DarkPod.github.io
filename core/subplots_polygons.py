@@ -28,9 +28,12 @@ def rotate(theta, vect):
 
 if __name__ == "__main__":
     plt.figure(figsize=(10, 10))
-    n_order = 50
-    complex_power = 0.5 + 5j
-
+    n_order = 1
+    step = 0.0005
+    complex_power = 0.5 + 25.010857580145688769j
+    offset = 0.0005
+    start = 0.02
+    end = 0.04
     # get colormap
     cmap = plt.cm.gist_earth
     # build cycler with 5 equally spaced colors from that colormap
@@ -43,12 +46,13 @@ if __name__ == "__main__":
     angle = []
     base_vect = np.array([1, 0])
     old_vect = np.array([1, 0])
-    for i in range(1, n_order):
+    x_order = [x for x in range(0, int((end - start) / step))]
+    for i in x_order:
+        i = start + (i - 1) * step + offset
         plt.figure(figsize=(10, 10))
         points = []
         vect = generate_zeta_vector(i, complex_power)
         angle.append(np.arccos(np.dot(vect, old_vect) / np.linalg.norm(vect) / np.linalg.norm(old_vect)))
-        old_vect = vect * (-1) ** (i + 1)
         first_point = np.array([0, 0])
         rotated_vect = base_vect
         # angle = 2
@@ -57,7 +61,7 @@ if __name__ == "__main__":
         plt.ylim([-2, 2])
         line = first_point
         en_point = first_point
-        for k in range(1, 40):
+        for k in range(1, 30):
             if angle:
                 rotated_vect = rotate(k * angle[-1], base_vect)
                 line = np.vstack((en_point, en_point + rotated_vect))
@@ -70,6 +74,7 @@ if __name__ == "__main__":
                 # sb.pointplot(x=np.array(points[-2:]).T[0], y=np.array(points[-2:]).T[1])
 
         old_vect = vect * (-1) ** (i + 1)
+        old_vect = old_vect / np.linalg.norm(old_vect)
         plt.title(f"k-th order : {i}")
         plt.xlabel("X", family="serif", color="r", weight="normal", size=16, labelpad=6)
         plt.ylabel("Y", family="serif", color="r", weight="normal", size=16, labelpad=6)
