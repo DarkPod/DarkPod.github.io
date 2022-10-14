@@ -21,7 +21,7 @@ def generate_zeta_vector(ord, pow):
 
 if __name__ == "__main__":
     plt.figure(figsize=(14, 5))
-    n_order = 10
+    n_order = 100
     complex_power = 0.5 + 0.1j
 
     # Colors
@@ -32,21 +32,28 @@ if __name__ == "__main__":
     # supply cycler to the rcParam
     plt.rcParams["axes.prop_cycle"] = c
 
-    complex_power = 0.5 + 14.134725j
-    st_point = np.array([0, 0])
-    line = st_point  # pas nécéssaire ?
-    en_point = st_point
-
-    for i in range(1, n_order):
-        vect = generate_zeta_vector(i, complex_power)
-        line = np.vstack((line, en_point + vect * (-1) ** (i + 1)))
+    # complex_power = 0.5 + 40.91871901214j
+    old_vect = np.array([1, 0])
+    for count in range(0, 200, 4):
+        angle = []
+        orders = []
         plt.figure(figsize=(14, 5))
-        sb.lineplot(x=line.T[0], y=line.T[1])
-        # print(f"line.T[0] = {line.T[0]}, line.T[1] = {line.T[1]}")
-        en_point = en_point + vect * (-1) ** (i + 1)
+        plt.xlim([0, 100])
+        plt.ylim([-0.5, 4])
+        complex_power = 0.5 + count / 100 * 140j
+        for i in range(2, n_order):
+            vect = generate_zeta_vector(i, complex_power)
+            angle.append(np.arccos(np.dot(vect, old_vect) / np.linalg.norm(vect) / np.linalg.norm(old_vect)))
+            orders.append(i)
+            old_vect = vect * (-1) ** (i + 1)
+
+        sb.pointplot(x=orders, y=angle)
         timestamp = datetime.now().strftime("%Y_%m_%d-%H_%M_%S")
-        plt.xlim([-5, 5])
-        plt.ylim([-5, 5])
+
+        plt.xlabel("Order k", family="serif", color="r", weight="normal", size=16, labelpad=6)
+        plt.ylabel("Angle between k and k+1", family="serif", color="r", weight="normal", size=16, labelpad=6)
+        plt.xticks([0, 5, 10, 25, 50, 75, 100])
+        plt.title(f"Complex power = {complex_power}")
         plt.savefig("core/output/" + timestamp + ".png")
         plt.close()
     a = 0
