@@ -29,7 +29,7 @@ def rotate(theta, vect):
 if __name__ == "__main__":
     plt.figure(figsize=(10, 10))
     n_order = 50
-    complex_power = 0.5 + 5j
+    complex_power = 0.5 + 20.5j
 
     # get colormap
     cmap = plt.cm.gist_earth
@@ -48,7 +48,7 @@ if __name__ == "__main__":
         points = []
         vect = generate_zeta_vector(i, complex_power)
         angle.append(np.arccos(np.dot(vect, old_vect) / np.linalg.norm(vect) / np.linalg.norm(old_vect)))
-        old_vect = vect * (-1) ** (i + 1)
+        old_vect = -vect  # * (-1) ** (i + 1)
         first_point = np.array([0, 0])
         rotated_vect = base_vect
         # angle = 2
@@ -69,7 +69,7 @@ if __name__ == "__main__":
                 # first_point = first_point + rotated_vect
                 # sb.pointplot(x=np.array(points[-2:]).T[0], y=np.array(points[-2:]).T[1])
 
-        old_vect = vect * (-1) ** (i + 1)
+        old_vect = -vect  # * (-1) ** (i + 1)
         plt.title(f"k-th order : {i}")
         plt.xlabel("X", family="serif", color="r", weight="normal", size=16, labelpad=6)
         plt.ylabel("Y", family="serif", color="r", weight="normal", size=16, labelpad=6)

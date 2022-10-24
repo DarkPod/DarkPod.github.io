@@ -7,7 +7,7 @@ if __name__ == "__main__":
     frame_size = (1000, 1000)
 
     out = cv2.VideoWriter(
-        "core/output/zeta_polygone_p3i_order1_step0.01_200iter_.avi", cv2.VideoWriter_fourcc(*"DIVX"), 5, frame_size
+        "core/output/zeta_polygone_p2i_order1_step1_200iter_neg.avi", cv2.VideoWriter_fourcc(*"DIVX"), 5, frame_size
     )
 
     for filename in glob.glob("core/output/*.png"):
