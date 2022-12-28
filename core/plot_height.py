@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sb
 from cycler import cycler
+from mpl_toolkits import mplot3d
 
 PRIMES = [
     2,
@@ -83,56 +84,63 @@ def generate_zeta_vector(ord, pow):
 
 if __name__ == "__main__":
 
-    # V = np.array([[1, 1], [-2, 2], [4, -7]])
-    # origin = np.array([[0, 0, 0], [0, 0, 0]])  # origin point
-    # plt.quiver(*origin, V[:, 0], V[:, 1], color=["r", "b", "g"], scale=21)
-    # plt.show()
-    # a = 0
-
     # Colors
     cmap = plt.cm.gist_rainbow
-    pace = 0.01
-    r_x = 0.1
-    r_y = 0.1
-    prod = np.ones(len(range(-int(r_y / pace), int(r_y / pace))) * len(range(-int(r_x / pace), int(r_x / pace))) - 1)
+    pace = 0.1
+    r_x = 1
+    r_y = 15
+    real = np.arange(-r_x + pace / 2, r_x, pace)
+    imag = np.arange(-r_y + pace / 2, r_y, pace)
+    xx, yy = np.meshgrid(real, imag)
+    cx = xx.reshape(-1)
+    cy = yy.reshape(-1)
+    cxy = np.vstack((cx, cy * 1j))
+    cj = cx + cy * 1j
+    prod = np.ones_like(cx)
 
     offset_real = 0
     offset_imag = 0
-    for prime in PRIMES:
+    for prime in PRIMES[:25]:
         s = []
         x = []
         y = []
-        for real in range(-int(r_x / pace), int(r_x / pace)):
-            real = real * pace + offset_real
-            for imag in range(-int(r_y / pace), int(r_y / pace)):
-                imag = imag * pace + offset_imag
-                if real == 0:
-                    damn = 1
-                if (real == 0) & (imag == 0):
-                    continue
-                # n = 1 / (1 - prime ** (-((real + imag * 1j) ** (-1))))
-                # n = real + imag * 1j
-                n = 1 / (real + imag * 1j)
-                s.append(n)
-                x.append(real)
-                y.append(imag)
-        term = np.array(s)
-        # prod = prod * term
-        prod = term
-        # prod = np.real(term)
+        n = 1 / (1 - prime ** (-cj))
+        # n = 1 / cj
+        # prod = n
+        prod = prod * n
+        X = np.real(prod) - cx
+        Y = np.imag(prod) - cy
+        Z = np.ones_like(Y)
+        CZ = np.vstack((X, Y, Z))
+        # S = CZ[0] ** 2 + CZ[1] ** 2 + CZ[2] ** 2
+        S = CZ[0] ** 2 + CZ[2] ** 2
+        fig = plt.figure(figsize=(10, 10))
+        n_plot = prod
+
+        # ax = plt.axes(projection="3d")
+
+        # ax.scatter3D(cx, cy, S, color="b", marker="o", label="Projected points in global Oijk")
+        plt.scatter(x=cx, y=cy, c=S)
+        plt.title(f"Surface of the function")
+        plt.xlabel("Re", family="serif", color="r", weight="normal", size=16, labelpad=6)
+        plt.ylabel("Im", family="serif", color="r", weight="normal", size=16, labelpad=6)
+        timestamp = datetime.now().strftime("%Y_%m_%d-%H_%M_%S")
+        os.makedirs("log", exist_ok=True)
+        plt.savefig("log/" + timestamp + ".png")
+        time.sleep(0.5)
+        # plt.show()
+
         plt.close()
         fig = plt.figure(figsize=(10, 10))
-        prod_plot = prod
-        x = np.array(x)
-        y = np.array(y)
-        sr = np.real(prod_plot)
-        si = np.imag(prod_plot)
+        n_plot = prod
+        sr = np.real(n_plot)
+        si = np.imag(n_plot)
 
-        # sr = sr / np.sqrt((sr**2 + si**2))
-        # si = si / np.sqrt((np.real(prod_plot) ** 2 + si**2))
+        sr = sr / np.sqrt((sr**2 + si**2))
+        si = si / np.sqrt((np.real(n_plot) ** 2 + si**2))
         plt.quiver(
-            x,
-            y,
+            cx,
+            cy,
             sr,
             si,
             # label=""
@@ -148,4 +156,5 @@ if __name__ == "__main__":
         plt.savefig("log/" + timestamp + ".png")
         time.sleep(0.5)
         # plt.show()
-        plt.show()
+        # plt.show()
+    # plt.show()

@@ -113,7 +113,8 @@ if __name__ == "__main__":
                     damn = 1
                 if (real == 0) & (imag == 0):
                     continue
-                n = 1 / (1 - prime ** (-(real + imag * 1j)))
+                # n = 1 / (1 - prime ** (-(real + imag * 1j)))
+                n = 1 / (real + imag * 1j)
                 s.append(n)
                 x.append(real)
                 y.append(imag)
