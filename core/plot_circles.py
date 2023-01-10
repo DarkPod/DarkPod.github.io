@@ -17,23 +17,27 @@ if __name__ == "__main__":
     c = 0.99
     c_max = 1
     n = 100
-    x = np.arange(-n, n + 1, 1)
+    p = 1
+    x = np.arange(-n, n + 1, p)
     xy = np.vstack((x, np.zeros_like(x)))
 
-    r = 2.5
-    theta = np.arange(0, 2 * np.pi, 0.1)
-    x = r * np.cos(theta)
-    y = r * np.sin(theta)
-    xy = np.vstack((x, y))
-
+    # r = 2.5
+    # theta = np.arange(0, 8 * np.pi, 0.1)
+    # x = r * np.cos(theta)
+    # y = r * np.sin(theta)
+    # xy = np.vstack((x, y))
+    # p = np.sqrt((x[0] - x[1]) ** 2 + (y[0] - y[1]) ** 2)
     # radiuses = c * x
 
     fig, ax = plt.subplots()
-    for elem in xy.T.tolist():
-        circle2 = plt.Circle((elem[0] * c, elem[1]), elem[0] * c_max, color="b", fill=False)
+    for idx, elem in enumerate(xy.T.tolist()):
+        if idx - len(x) / 2 > 0:
+            circle2 = plt.Circle((elem[0] * c, elem[1] * c), abs(idx - len(x) / 2) * p * c_max, color="b", fill=False)
+        else:
+            circle2 = plt.Circle((elem[0] * c, elem[1] * c), abs(idx - len(x) / 2) * p * c_max, color="r", fill=False)
         ax.add_patch(circle2)
 
-    ax.scatter(xy[0] * c, xy[1])
+    ax.scatter(xy[0] * c, xy[1] * c)
     # # change default range so that new circles will work
     # ax.set_xlim((0, 10))
     # ax.set_ylim((0, 10))
